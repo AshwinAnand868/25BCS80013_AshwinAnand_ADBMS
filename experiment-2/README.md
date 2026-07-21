@@ -150,9 +150,7 @@ FROM inventory;
 
 ---
 
-## Output Screenshot
-
-![Experiment 2 Output](image.png)
+## Output Screenshot attached
 
 ---
 
