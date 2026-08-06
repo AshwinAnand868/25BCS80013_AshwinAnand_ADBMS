@@ -697,3 +697,119 @@ CROSS JOIN products p;
 - Every possible combination of rows
 
 ---
+
+---
+
+# Experiment 4.6 — SELF JOIN
+
+## Objective
+
+Understand how to use a **SELF JOIN** to compare rows within the same table by using table aliases. This technique is useful for identifying relationships between records stored in a single table.
+
+---
+
+## Problem Statement
+
+The `student` table stores information about students, including the `Course_id` of each student's favorite course.
+
+Perform the following tasks:
+
+1. Find pairs of students who belong to the same department.
+2. Identify students who have chosen the same favorite `Course_id`. Display the `St_id`, `St_Name`, and `Course_id` in ascending order of `Course_id`.
+
+---
+
+# Question 1 — Students in the Same Department
+
+## SQL Query
+
+```sql
+SELECT 
+    s1.St_id,
+    s1.St_Name,
+    s1.Department,
+    s2.St_id,
+    s2.St_Name,
+    s2.Department
+FROM student AS s1
+INNER JOIN student AS s2
+ON s1.Department = s2.Department
+AND s1.St_id != s2.St_id;
+```
+
+### Explanation
+
+- The `student` table is joined with itself using the aliases `s1` and `s2`.
+- Students are matched when they belong to the same department.
+- The condition `s1.St_id != s2.St_id` ensures that a student is not paired with themselves.
+
+### Expected Output
+
+| St_id | St_Name | Department | St_id | St_Name | Department |
+|-------:|-----------------|-------------|-------:|-----------------|-------------|
+| 1003 | David Lee | Mathematics | 1006 | Light Yagami | Mathematics |
+| 1004 | Sarah Johnson | English | 1008 | Patrick Bateman | English |
+| 1005 | Michael Chen | Biology | 1007 | Jordan | Biology |
+| 1006 | Light Yagami | Mathematics | 1003 | David Lee | Mathematics |
+| 1007 | Jordan | Biology | 1005 | Michael Chen | Biology |
+| 1008 | Patrick Bateman | English | 1004 | Sarah Johnson | English |
+
+### Output Screenshot
+
+```md
+![Experiment 4.6 - Question 1](experiment4_6_q1.png)
+```
+
+---
+
+# Question 2 — Students with the Same Favorite Course
+
+## SQL Query
+
+```sql
+SELECT DISTINCT
+    s1.St_id,
+    s1.St_Name,
+    s1.Course_id
+FROM student AS s1
+INNER JOIN student AS s2
+ON s1.Course_id = s2.Course_id
+AND s1.St_id != s2.St_id
+ORDER BY s1.Course_id;
+```
+
+### Explanation
+
+- The table is joined with itself using `Course_id`.
+- Students who share the same favorite course are identified.
+- `DISTINCT` removes duplicate rows produced by the self join.
+- `ORDER BY` sorts the results in ascending order of `Course_id`.
+
+### Expected Output
+
+| St_id | St_Name | Course_id |
+|-------:|-----------------|-----------|
+| 1005 | Michael Chen | BIO103 |
+| 1007 | Jordan | BIO103 |
+| 1004 | Sarah Johnson | ENG201 |
+| 1008 | Patrick Bateman | ENG201 |
+| 1003 | David Lee | MAT202 |
+| 1006 | Light Yagami | MAT202 |
+
+### Output Screenshot
+
+```md
+![Experiment 4.6 - Question 2](experiment4_6_q2.png)
+```
+
+---
+
+## Key Concepts Learned
+
+| Concept | Description |
+|---------|-------------|
+| `SELF JOIN` | Joins a table with itself using aliases. |
+| Table Aliases | Used to distinguish multiple instances of the same table. |
+| `INNER JOIN` | Returns matching rows based on the join condition. |
+| `DISTINCT` | Removes duplicate rows from the result set. |
+| `ORDER BY` | Sorts the result based on one or more columns. |
